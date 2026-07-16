@@ -1,243 +1,2079 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FLAMES 🔥</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FLAMES Pro 2026 - a premium, animated FLAMES compatibility web app.">
+  <meta name="theme-color" content="#ff4f8b">
+  <title>FLAMES Pro 2026</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --bg-a: #421238;
+      --bg-b: #18112f;
+      --bg-c: #f05493;
+      --accent: #ff4f8b;
+      --accent-2: #ffd166;
+      --accent-3: #7c5cff;
+      --text: #fff7fb;
+      --muted: rgba(255,255,255,.72);
+      --faint: rgba(255,255,255,.12);
+      --glass: rgba(255,255,255,.14);
+      --glass-strong: rgba(255,255,255,.22);
+      --stroke: rgba(255,255,255,.24);
+      --shadow: rgba(21, 8, 32, .38);
+      --danger: #ff6874;
+      --success: #40e8a3;
+      --radius: 24px;
+      --speed: 260ms;
+    }
 
-<style>
-:root {
-  --bg1:#ff758c;
-  --bg2:#ff7eb3;
-  --card:#ffffff;
-  --text:#ff4f81;
-}
+    body.light {
+      color-scheme: light;
+      --text: #251727;
+      --muted: rgba(38, 23, 42, .72);
+      --faint: rgba(255,255,255,.58);
+      --glass: rgba(255,255,255,.54);
+      --glass-strong: rgba(255,255,255,.72);
+      --stroke: rgba(255,255,255,.68);
+      --shadow: rgba(83, 37, 74, .18);
+    }
 
-body.dark {
-  --bg1:#0f2027;
-  --bg2:#203a43;
-  --card:#1e1e1e;
-  --text:#00e5ff;
-}
+    body[data-theme="romantic"] { --bg-a:#551036; --bg-b:#17071d; --bg-c:#ff4f8b; --accent:#ff4f8b; --accent-2:#ffd1dc; --accent-3:#ff9f1c; }
+    body[data-theme="galaxy"] { --bg-a:#100723; --bg-b:#020411; --bg-c:#6638f0; --accent:#8d7dff; --accent-2:#69e2ff; --accent-3:#ff5bd8; }
+    body[data-theme="neon"] { --bg-a:#03181d; --bg-b:#090312; --bg-c:#00f5d4; --accent:#00f5d4; --accent-2:#f15bb5; --accent-3:#fee440; }
+    body[data-theme="sakura"] { --bg-a:#7d294a; --bg-b:#2b1224; --bg-c:#ffa7c4; --accent:#ff7caf; --accent-2:#ffe1ed; --accent-3:#8bd3dd; }
+    body[data-theme="ocean"] { --bg-a:#063b57; --bg-b:#041a2b; --bg-c:#00b4d8; --accent:#4cc9f0; --accent-2:#80ffdb; --accent-3:#5390d9; }
+    body[data-theme="fire"] { --bg-a:#5d1807; --bg-b:#1d0804; --bg-c:#ff6b00; --accent:#ff7a18; --accent-2:#ffd166; --accent-3:#ef233c; }
+    body[data-theme="cyberpunk"] { --bg-a:#20104a; --bg-b:#05000c; --bg-c:#ff00e5; --accent:#00f0ff; --accent-2:#fcee09; --accent-3:#ff2a6d; }
+    body[data-theme="rainbow"] { --bg-a:#33126d; --bg-b:#061531; --bg-c:#ff4d6d; --accent:#ff4d6d; --accent-2:#4dffb8; --accent-3:#6c63ff; }
 
-* {
-  box-sizing: border-box;
-  font-family: Poppins, sans-serif;
-}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--accent) 65%, transparent), transparent 28%),
+        radial-gradient(circle at 82% 12%, color-mix(in srgb, var(--accent-2) 45%, transparent), transparent 24%),
+        linear-gradient(135deg, var(--bg-a), var(--bg-b) 52%, var(--bg-c));
+      background-size: 160% 160%;
+      animation: bgShift 16s ease-in-out infinite;
+      overflow-x: hidden;
+    }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: linear-gradient(135deg,var(--bg1),var(--bg2));
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: 0.5s;
-  overflow: hidden;
-}
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, #000, transparent 78%);
+      z-index: 0;
+    }
 
-.container {
-  background: var(--card);
-  color: var(--text);
-  width: 90%;
-  max-width: 360px;
-  padding: 25px;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-  animation: pop 0.7s ease;
-}
+    @keyframes bgShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
 
-@keyframes pop {
-  from { transform: scale(0.8); opacity:0; }
-  to { transform: scale(1); opacity:1; }
-}
+    .ambient, .effects {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-h1 { margin: 10px 0; }
+    .blob {
+      position: absolute;
+      width: 38vmax;
+      aspect-ratio: 1;
+      border-radius: 999px;
+      filter: blur(40px);
+      opacity: .36;
+      background: var(--accent);
+      animation: blobFloat 18s ease-in-out infinite;
+    }
 
-input, select {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-}
+    .blob:nth-child(1) { left: -16vmax; top: 8%; }
+    .blob:nth-child(2) { right: -12vmax; top: 26%; background: var(--accent-2); animation-delay: -6s; }
+    .blob:nth-child(3) { left: 28%; bottom: -20vmax; background: var(--accent-3); animation-delay: -11s; }
 
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 25px;
-  background: linear-gradient(135deg,#ff4f81,#ff9800);
-  color: #fff;
-  font-size: 17px;
-  cursor: pointer;
-}
+    @keyframes blobFloat {
+      0%, 100% { transform: translate3d(0,0,0) scale(1); }
+      35% { transform: translate3d(9vw,-5vh,0) scale(1.08); }
+      70% { transform: translate3d(-5vw,6vh,0) scale(.92); }
+    }
 
-button:active { transform: scale(0.95); }
+    .app {
+      position: relative;
+      z-index: 1;
+      width: min(1120px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: max(14px, env(safe-area-inset-top)) 14px 18px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 14px;
+    }
 
-.actions {
-  display: flex;
-  gap: 10px;
-}
+    .topbar, .glass, .modal-card {
+      border: 1px solid var(--stroke);
+      background: linear-gradient(145deg, var(--glass-strong), var(--glass));
+      box-shadow: 0 24px 70px var(--shadow), inset 0 1px 0 rgba(255,255,255,.24);
+      backdrop-filter: blur(26px) saturate(150%);
+      -webkit-backdrop-filter: blur(26px) saturate(150%);
+    }
 
-.actions button {
-  width: 50%;
-  font-size: 14px;
-}
+    .topbar {
+      min-height: 68px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      gap: 12px;
+      animation: slideDown .7s cubic-bezier(.2,.8,.2,1) both;
+    }
 
-.result {
-  margin-top: 15px;
-  font-size: 22px;
-  font-weight: bold;
-  animation: fade 0.6s ease;
-}
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-@keyframes fade {
-  from { opacity:0; transform:translateY(10px); }
-  to { opacity:1; transform:translateY(0); }
-}
+    .brand {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 12px;
+      padding-left: 4px;
+    }
 
-.emoji {
-  font-size: 40px;
-  animation: bounce 1s infinite;
-}
+    .logo {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 12px 34px color-mix(in srgb, var(--accent) 40%, transparent);
+      animation: pulseGlow 2.7s ease-in-out infinite;
+    }
 
-@keyframes bounce {
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
-}
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); filter: saturate(1); }
+      50% { transform: scale(1.055); filter: saturate(1.35); }
+    }
 
-/* ❤️ Heart Rain */
-.heart {
-  position: fixed;
-  top: -10px;
-  font-size: 20px;
-  animation: fall linear forwards;
-}
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.15rem, 3.2vw, 1.72rem);
+      letter-spacing: 0;
+      line-height: 1;
+    }
 
-@keyframes fall {
-  to {
-    transform: translateY(110vh);
-    opacity: 0;
-  }
-}
+    .brand p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-.toggle {
-  font-size: 13px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-</style>
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    .icon-btn, .pill-btn, .primary-btn {
+      border: 0;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform var(--speed), box-shadow var(--speed), background var(--speed), opacity var(--speed);
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+    }
+
+    .icon-btn:hover, .pill-btn:hover, .primary-btn:hover { transform: translateY(-2px); }
+    .icon-btn:active, .pill-btn:active, .primary-btn:active { transform: translateY(1px) scale(.98); }
+    .icon-btn:focus-visible, .pill-btn:focus-visible, .primary-btn:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent-2) 70%, transparent);
+      outline-offset: 3px;
+    }
+
+    .pill-btn, .primary-btn {
+      min-height: 48px;
+      border-radius: 18px;
+      padding: 0 16px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 760;
+    }
+
+    .primary-btn {
+      width: 100%;
+      min-height: 58px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      box-shadow: 0 18px 48px color-mix(in srgb, var(--accent) 38%, transparent);
+    }
+
+    .primary-btn:disabled { opacity: .55; cursor: progress; }
+
+    .ripple {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.52);
+      transform: translate(-50%, -50%) scale(1);
+      animation: ripple .62s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes ripple {
+      to { opacity: 0; transform: translate(-50%, -50%) scale(18); }
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, .98fr) minmax(310px, .82fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .panel {
+      border-radius: var(--radius);
+      padding: clamp(14px, 2.4vw, 22px);
+      animation: rise .76s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .panel:nth-child(2) { animation-delay: .08s; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(22px) scale(.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .hero-title {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 6.2vw, 4.35rem);
+      line-height: .94;
+      letter-spacing: 0;
+    }
+
+    .gradient-text {
+      background: linear-gradient(100deg, #fff, var(--accent-2), var(--accent), #fff);
+      background-size: 240% 100%;
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: textShine 6s ease-in-out infinite;
+    }
+
+    @keyframes textShine {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .lead {
+      color: var(--muted);
+      margin: 0 0 20px;
+      max-width: 58ch;
+      line-height: 1.55;
+      font-size: clamp(.92rem, 1.8vw, 1.02rem);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    input, select {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.13);
+      color: var(--text);
+      padding: 0 15px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
+      transition: border var(--speed), background var(--speed), transform var(--speed);
+    }
+
+    select option { color: #21162a; }
+    input::placeholder { color: color-mix(in srgb, var(--muted) 75%, transparent); }
+    input:focus, select:focus { border-color: color-mix(in srgb, var(--accent-2) 65%, #fff); background: rgba(255,255,255,.18); }
+
+    .hint, .error {
+      min-height: 18px;
+      margin: 0;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+
+    .error { color: #ffd1d6; font-weight: 800; }
+
+    .quick-row, .share-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .quick-row > * { flex: 1 1 132px; }
+
+    .settings {
+      margin-top: 16px;
+      display: none;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      border-top: 1px solid rgba(255,255,255,.14);
+      padding-top: 14px;
+    }
+
+    .settings.open { display: grid; animation: softOpen .25s ease both; }
+    @keyframes softOpen { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+    .switch-line {
+      min-height: 52px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      gap: 10px;
+    }
+
+    .switch {
+      width: 54px;
+      height: 30px;
+      border-radius: 999px;
+      border: 0;
+      background: rgba(255,255,255,.18);
+      padding: 3px;
+      flex: 0 0 auto;
+      cursor: pointer;
+    }
+
+    .knob {
+      display: block;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform var(--speed), background var(--speed);
+      box-shadow: 0 6px 14px rgba(0,0,0,.22);
+    }
+
+    .switch[aria-pressed="true"] { background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+    .switch[aria-pressed="true"] .knob { transform: translateX(24px); }
+
+    .result-card {
+      display: grid;
+      gap: 12px;
+      min-height: 500px;
+    }
+
+    #resultArea[hidden] {
+      display: none !important;
+    }
+
+    .status-card {
+      min-height: 204px;
+      border-radius: 24px;
+      padding: 15px;
+      background: linear-gradient(145deg, rgba(255,255,255,.15), rgba(255,255,255,.08));
+      border: 1px solid rgba(255,255,255,.16);
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .status-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -65% -20%;
+      height: 90%;
+      background: radial-gradient(circle, color-mix(in srgb, var(--accent) 35%, transparent), transparent 65%);
+      animation: aura 5s ease-in-out infinite;
+    }
+
+    @keyframes aura { 50% { transform: translateY(-16px) scale(1.04); } }
+
+    .wheel-wrap {
+      position: relative;
+      width: min(230px, 72vw);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      z-index: 1;
+    }
+
+    .wheel {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.22);
+      background: conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent-3), var(--accent));
+      mask: radial-gradient(circle, transparent 47%, #000 48%);
+      animation: spin 14s linear infinite;
+      opacity: .75;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .wheel-letter {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 17px;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.2);
+      font-weight: 950;
+      transition: transform .42s cubic-bezier(.2,.8,.2,1), opacity .42s, background .42s;
+    }
+
+    .wheel-letter.out {
+      opacity: .23;
+      transform: translate(-50%, -50%) scale(.72) rotate(14deg) !important;
+      background: rgba(255,255,255,.06);
+    }
+
+    .wheel-center {
+      width: 46%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.2);
+      font-size: 2.2rem;
+      z-index: 2;
+      box-shadow: inset 0 0 24px rgba(255,255,255,.08);
+    }
+
+    .result-emoji {
+      font-size: clamp(3.5rem, 12vw, 5.8rem);
+      line-height: 1;
+      filter: drop-shadow(0 16px 24px rgba(0,0,0,.25));
+      animation: revealEmoji 1.8s ease-in-out infinite;
+    }
+
+    @keyframes revealEmoji {
+      0%,100% { transform: translateY(0) rotate(-2deg) scale(1); }
+      50% { transform: translateY(-10px) rotate(3deg) scale(1.05); }
+    }
+
+    .result-title {
+      margin: 0;
+      font-size: clamp(1.75rem, 6.4vw, 3rem);
+      line-height: 1;
+    }
+
+    .typing {
+      min-height: 44px;
+      color: var(--muted);
+      line-height: 1.45;
+      z-index: 1;
+    }
+
+    .meter {
+      display: grid;
+      gap: 9px;
+    }
+
+    .meter-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 900;
+    }
+
+    .bar {
+      height: 14px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.15);
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: width 1.1s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 8px;
+    }
+
+    .fact, .achievement, .history-item {
+      border-radius: 18px;
+      padding: 13px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+
+    .fact small {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-weight: 800;
+      font-size: .74rem;
+    }
+
+    .fact strong { font-size: .95rem; }
+
+    .quote-card, .advice-card {
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.14);
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .history-panel {
+      margin-top: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      min-height: 82px;
+      border-radius: 18px;
+      padding: 12px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.14);
+      display: grid;
+      align-content: center;
+      gap: 4px;
+    }
+
+    .stat strong {
+      font-size: clamp(1.1rem, 4vw, 1.6rem);
+      overflow-wrap: anywhere;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: .75rem;
+      font-weight: 800;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 10px;
+      max-height: 280px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .history-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      cursor: pointer;
+      transition: transform var(--speed), background var(--speed);
+    }
+
+    .history-item:hover { transform: translateY(-2px); background: rgba(255,255,255,.15); }
+    .history-item b { display:block; overflow-wrap:anywhere; }
+    .history-item small { color: var(--muted); }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 22px;
+      border: 1px dashed rgba(255,255,255,.2);
+      border-radius: 18px;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(0,0,0,.42);
+      z-index: 10;
+    }
+
+    .modal.open { display: grid; animation: fadeIn .22s ease both; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-card {
+      width: min(520px, 100%);
+      border-radius: 26px;
+      padding: 20px;
+      animation: modalPop .28s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    @keyframes modalPop { from { transform: translateY(18px) scale(.96); opacity:.4; } to { transform:none; opacity:1; } }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .modal-head h2 { margin:0; }
+
+    .achievements {
+      display: grid;
+      gap: 10px;
+    }
+
+    .achievement.locked { opacity: .48; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(18px + env(safe-area-inset-bottom));
+      transform: translateX(-50%) translateY(140%);
+      z-index: 20;
+      border-radius: 999px;
+      background: rgba(20,15,28,.82);
+      border: 1px solid rgba(255,255,255,.18);
+      backdrop-filter: blur(18px);
+      color: #fff;
+      padding: 12px 16px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.28);
+      transition: transform .32s cubic-bezier(.2,.8,.2,1);
+      max-width: min(92vw, 560px);
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    .particle, .heart, .sparkle, .confetti {
+      position: fixed;
+      pointer-events: none;
+      z-index: 7;
+      will-change: transform, opacity;
+    }
+
+    .particle {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.42);
+      animation: floatParticle var(--dur, 8s) linear forwards;
+    }
+
+    @keyframes floatParticle {
+      from { transform: translate3d(var(--x), 106vh, 0); opacity: 0; }
+      12% { opacity: .8; }
+      to { transform: translate3d(calc(var(--x) + var(--drift)), -12vh, 0); opacity: 0; }
+    }
+
+    .heart { font-size: var(--size, 20px); animation: heartFall var(--dur, 4s) linear forwards; }
+    @keyframes heartFall {
+      from { transform: translate3d(var(--x), -8vh, 0) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      to { transform: translate3d(calc(var(--x) + var(--drift)), 108vh, 0) rotate(260deg); opacity: 0; }
+    }
+
+    .sparkle {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      box-shadow: 0 0 18px var(--accent-2);
+      animation: explode .8s ease-out forwards;
+    }
+
+    .confetti {
+      width: 9px;
+      height: 14px;
+      border-radius: 3px;
+      background: var(--accent);
+      animation: confetti 1.3s ease-out forwards;
+    }
+
+    @keyframes explode {
+      to { transform: translate(var(--dx), var(--dy)) scale(.2); opacity: 0; }
+    }
+
+    @keyframes confetti {
+      to { transform: translate(var(--dx), var(--dy)) rotate(720deg); opacity: 0; }
+    }
+
+    .loader {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 30;
+      background: linear-gradient(135deg, var(--bg-a), var(--bg-b));
+      transition: opacity .55s ease, visibility .55s ease;
+    }
+
+    .loader.hide { opacity: 0; visibility: hidden; }
+
+    .loader-inner {
+      display: grid;
+      justify-items: center;
+      gap: 16px;
+      text-align: center;
+    }
+
+    .loader-heart {
+      font-size: 4rem;
+      animation: beat 1s ease-in-out infinite;
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      30% { transform: scale(1.22); }
+      55% { transform: scale(.96); }
+    }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      font-size: .8rem;
+    }
+
+    .sr-only {
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+
+    @media (min-width: 901px) {
+      .result-card {
+        position: sticky;
+        top: 14px;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .app {
+        width: min(860px, 100%);
+      }
+
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        padding: 16px;
+      }
+
+      .hero-title {
+        font-size: clamp(2rem, 8vw, 3.8rem);
+      }
+
+      .result-card {
+        min-height: auto;
+        grid-template-columns: minmax(280px, .9fr) 1fr;
+        align-items: start;
+      }
+
+      .result-card > .status-card {
+        min-height: 100%;
+      }
+
+      #resultArea {
+        display: grid;
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .result-card {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        padding: max(10px, env(safe-area-inset-top)) 10px 12px;
+        gap: 10px;
+      }
+
+      .topbar {
+        min-height: 58px;
+        padding: 9px;
+        border-radius: 18px;
+        align-items: center;
+      }
+
+      .logo {
+        width: 38px;
+        height: 38px;
+        border-radius: 13px;
+      }
+
+      .brand {
+        gap: 8px;
+      }
+
+      .brand h1 {
+        font-size: 1.05rem;
+      }
+
+      .brand p { display: none; }
+      .toolbar { gap: 6px; }
+      .icon-btn { width: 36px; height: 36px; border-radius: 13px; }
+      .panel {
+        padding: 12px;
+        border-radius: 18px;
+      }
+      .form-grid, .settings, .facts, .stats { grid-template-columns: 1fr; }
+      .hero-title {
+        font-size: clamp(2.1rem, 13.2vw, 3.15rem);
+        margin-bottom: 8px;
+      }
+      .lead {
+        margin-bottom: 14px;
+        line-height: 1.45;
+      }
+      label, .hint, .error {
+        font-size: .76rem;
+      }
+      input, select {
+        min-height: 44px;
+        border-radius: 15px;
+      }
+      .primary-btn {
+        min-height: 50px;
+        border-radius: 16px;
+      }
+      .pill-btn {
+        min-height: 42px;
+        border-radius: 15px;
+        padding: 0 12px;
+        font-size: .9rem;
+      }
+      .quick-row > * { flex: 1 1 calc(50% - 8px); }
+      .quick-row > :last-child { flex-basis: 100%; }
+      .share-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+      .status-card {
+        min-height: 172px;
+        border-radius: 18px;
+        padding: 12px;
+      }
+      .wheel-wrap {
+        width: min(198px, 68vw);
+      }
+      .wheel-letter {
+        width: 38px;
+        height: 38px;
+        border-radius: 14px;
+      }
+      .fact, .quote-card, .advice-card, .history-item, .stat {
+        border-radius: 15px;
+        padding: 10px;
+      }
+      .history-panel {
+        margin-top: 12px;
+        gap: 10px;
+      }
+      .history-list {
+        max-height: 230px;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .brand h1 {
+        max-width: 118px;
+        line-height: 1.05;
+      }
+
+      .toolbar {
+        max-width: 84px;
+      }
+
+      .icon-btn {
+        width: 34px;
+        height: 34px;
+      }
+
+      .share-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
 </head>
-
-<body>
-
-<div class="container">
-  <h1 id="title">🔥 FLAMES 🔥</h1>
-
-  <select id="lang" onchange="setLang()">
-    <option value="en">English</option>
-    <option value="te">తెలుగు</option>
-    <option value="hi">हिंदी</option>
-  </select>
-
-  <input id="name1" placeholder="Your Name">
-  <input id="name2" placeholder="Partner Name">
-
-  <button onclick="calculate()">Calculate 💖</button>
-
-  <div class="actions">
-    <button onclick="resetGame()">🔄 Reset</button>
-    <button onclick="share()">📤 Share</button>
+<body data-theme="romantic">
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader-inner">
+      <div class="loader-heart">💖</div>
+      <strong>FLAMES Pro 2026</strong>
+      <span id="loaderText">Calibrating cosmic chemistry...</span>
+    </div>
   </div>
 
-  <div id="result"></div>
+  <div class="ambient" aria-hidden="true">
+    <span class="blob"></span>
+    <span class="blob"></span>
+    <span class="blob"></span>
+  </div>
+  <div class="effects" id="effects" aria-hidden="true"></div>
 
-  <div class="toggle" onclick="toggleDark()">🌙 Toggle Dark Mode</div>
-</div>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand" aria-label="FLAMES Pro 2026">
+        <div class="logo" aria-hidden="true">🔥</div>
+        <div>
+          <h1>FLAMES Pro 2026</h1>
+          <p id="tagline">Premium love compatibility studio</p>
+        </div>
+      </div>
+      <nav class="toolbar" aria-label="App controls">
+        <button class="icon-btn" id="modeBtn" title="Toggle dark or light mode" aria-label="Toggle dark or light mode">☾</button>
+        <button class="icon-btn" id="soundBtn" title="Toggle sound" aria-label="Toggle sound">🔊</button>
+        <button class="icon-btn" id="settingsBtn" title="Settings" aria-label="Open settings">⚙</button>
+        <button class="icon-btn" id="achievementsBtn" title="Achievements" aria-label="Open achievements">🏆</button>
+      </nav>
+    </header>
 
-<!-- Sounds -->
-<audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-click-error-1110.mp3"></audio>
-<audio id="loveSound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
+    <main>
+      <section class="glass panel" aria-labelledby="mainTitle">
+        <h2 class="hero-title" id="mainTitle"><span class="gradient-text">FLAMES</span><br>with drama.</h2>
+        <p class="lead" id="leadText">Enter two names, watch the classic FLAMES wheel eliminate letters, and get a playful compatibility card with history, stats, sharing, and surprises.</p>
 
-<script>
-const texts = {
-  en:{
-    your:"Your Name", partner:"Partner Name", flames:"FLAMES"
-  },
-  te:{
-    your:"మీ పేరు", partner:"వారి పేరు", flames:"ఫ్లేమ్స్"
-  },
-  hi:{
-    your:"आपका नाम", partner:"साथी का नाम", flames:"फ्लेम्स"
-  }
-};
+        <form id="flamesForm" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label for="nameA" id="labelA">Your name</label>
+              <input id="nameA" name="nameA" autocomplete="name" maxlength="40" placeholder="Alex" required>
+              <p class="hint" id="hintA">Letters matter. Spaces do not.</p>
+            </div>
+            <div class="field">
+              <label for="nameB" id="labelB">Partner name</label>
+              <input id="nameB" name="nameB" maxlength="40" placeholder="Sam" required>
+              <p class="hint" id="hintB">Try a famous couple for easter eggs.</p>
+            </div>
+            <div class="field">
+              <label for="dobA" id="labelDobA">Your DOB, optional</label>
+              <input id="dobA" name="dobA" type="date">
+            </div>
+            <div class="field">
+              <label for="dobB" id="labelDobB">Partner DOB, optional</label>
+              <input id="dobB" name="dobB" type="date">
+            </div>
+            <div class="field full">
+              <button class="primary-btn" type="submit" id="calcBtn">Calculate FLAMES ✨</button>
+              <p class="error" id="errorText" role="alert"></p>
+            </div>
+          </div>
+        </form>
 
-function setLang(){
-  const l = lang.value;
-  name1.placeholder = texts[l].your;
-  name2.placeholder = texts[l].partner;
-  title.innerText = "🔥 " + texts[l].flames + " 🔥";
-}
+        <div class="quick-row">
+          <button class="pill-btn" id="resetBtn" type="button">↺ Reset</button>
+          <button class="pill-btn" id="demoBtn" type="button">♡ Famous Pair</button>
+          <button class="pill-btn" id="historyFocusBtn" type="button">⌕ History</button>
+        </div>
 
-function calculate(){
-  clickSound.play();
-  let a = name1.value.trim().toLowerCase().replace(/\s/g,'').split('');
-  let b = name2.value.trim().toLowerCase().replace(/\s/g,'').split('');
+        <div class="settings" id="settingsPanel" aria-label="Settings panel">
+          <div class="field">
+            <label for="themeSelect" id="themeLabel">Theme</label>
+            <select id="themeSelect">
+              <option value="romantic">Romantic</option>
+              <option value="galaxy">Galaxy</option>
+              <option value="neon">Neon</option>
+              <option value="sakura">Sakura</option>
+              <option value="ocean">Ocean</option>
+              <option value="fire">Fire</option>
+              <option value="cyberpunk">Cyberpunk</option>
+              <option value="rainbow">Rainbow</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="langSelect" id="languageLabel">Language</label>
+            <select id="langSelect">
+              <option value="en">English</option>
+              <option value="te">తెలుగు</option>
+              <option value="hi">हिंदी</option>
+            </select>
+          </div>
+          <div class="switch-line">
+            <span id="vibeLabel">Vibration</span>
+            <button class="switch" id="vibeBtn" type="button" aria-pressed="true" aria-label="Toggle vibration"><span class="knob"></span></button>
+          </div>
+          <div class="switch-line">
+            <span id="heartLabel">Heart rain</span>
+            <button class="switch" id="heartBtn" type="button" aria-pressed="true" aria-label="Toggle heart rain"><span class="knob"></span></button>
+          </div>
+        </div>
 
-  if(!a.length || !b.length){ alert("Enter both names"); return; }
+        <section class="history-panel" id="historyPanel" aria-labelledby="historyTitle">
+          <div class="stats">
+            <div class="stat"><strong id="totalStat">0</strong><span id="totalLabel">Total</span></div>
+            <div class="stat"><strong id="commonStat">-</strong><span id="commonLabel">Most common</span></div>
+            <div class="stat"><strong id="favoriteStat">-</strong><span id="favoriteLabel">Favorite pair</span></div>
+          </div>
+          <div class="field">
+            <label for="historySearch" id="historyTitle">History</label>
+            <input id="historySearch" type="search" placeholder="Search names or results">
+          </div>
+          <div class="history-list" id="historyList" tabindex="0" aria-live="polite"></div>
+          <button class="pill-btn" id="clearHistoryBtn" type="button">Clear history</button>
+        </section>
+      </section>
 
-  for(let i=0;i<a.length;i++){
-    let j = b.indexOf(a[i]);
-    if(j!=-1){ a.splice(i,1); b.splice(j,1); i--; }
-  }
+      <aside class="glass panel result-card" aria-live="polite">
+        <div class="status-card" id="stage">
+          <div class="wheel-wrap" id="wheelWrap" aria-hidden="true">
+            <div class="wheel"></div>
+            <div class="wheel-center">💘</div>
+          </div>
+          <p class="typing" id="stageText">Ready when your heart is.</p>
+        </div>
 
-  const flames = [
-    ["Friends","🤝"],["Love","❤️"],["Affection","😊"],
-    ["Marriage","💍"],["Enemies","😈"],["Siblings","👨‍👩‍👧"]
-  ];
+        <div id="resultArea" hidden>
+          <div class="status-card" id="captureCard">
+            <div class="result-emoji" id="resultEmoji">💖</div>
+            <h2 class="result-title gradient-text" id="resultName">Love</h2>
+            <p class="typing" id="resultDescription"></p>
+            <div class="meter" style="width:100%">
+              <div class="meter-head"><span id="compatLabel">Compatibility</span><span id="percentText">0%</span></div>
+              <div class="bar" aria-hidden="true"><span id="percentBar"></span></div>
+            </div>
+          </div>
 
-  const res = flames[(a.length+b.length-1)%6];
-  loveSound.play();
-  rainHearts();
+          <div class="facts">
+            <div class="fact"><small id="meterLabel">Love meter</small><strong id="loveMeter">♡♡♡♡♡</strong></div>
+            <div class="fact"><small id="nickLabel">Nickname</small><strong id="nickname">-</strong></div>
+            <div class="fact"><small id="luckyNumberLabel">Lucky number</small><strong id="luckyNumber">-</strong></div>
+            <div class="fact"><small id="luckyColorLabel">Lucky color</small><strong id="luckyColor">-</strong></div>
+            <div class="fact"><small id="luckyDateLabel">Lucky date</small><strong id="luckyDate">-</strong></div>
+            <div class="fact"><small id="zodiacLabel">Zodiac match</small><strong id="zodiacText">Optional</strong></div>
+          </div>
 
-  result.innerHTML = `
-    <div class="result">
-      <div class="emoji">${res[1]}</div>
-      ${res[0]}
-    </div>`;
-}
+          <div class="quote-card" id="funnyMessage"></div>
+          <div class="quote-card" id="romanticQuote"></div>
+          <div class="advice-card" id="dailyAdvice"></div>
 
-function resetGame(){
-  name1.value=""; name2.value="";
-  result.innerHTML="";
-}
+          <div class="share-row">
+            <button class="pill-btn" id="whatsappBtn" type="button">WhatsApp</button>
+            <button class="pill-btn" id="nativeShareBtn" type="button">Share</button>
+            <button class="pill-btn" id="copyBtn" type="button">Copy</button>
+            <button class="pill-btn" id="downloadBtn" type="button">PNG</button>
+          </div>
+        </div>
+      </aside>
+    </main>
 
-function toggleDark(){
-  document.body.classList.toggle("dark");
-}
+    <footer id="footerText">Offline-friendly. Keyboard: Ctrl/⌘ + Enter calculates, Esc resets.</footer>
+  </div>
 
-function share(){
-  if(!result.innerText) return alert("Calculate first!");
-  const msg = `🔥 FLAMES Result 🔥\n${name1.value} ❤️ ${name2.value}\nResult: ${result.innerText}`;
-  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
-}
+  <div class="modal" id="achievementsModal" role="dialog" aria-modal="true" aria-labelledby="achTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="achTitle">Hidden achievements</h2>
+        <button class="icon-btn" id="closeAchievements" aria-label="Close achievements">×</button>
+      </div>
+      <div class="achievements" id="achievementsList"></div>
+    </div>
+  </div>
 
-function rainHearts(){
-  for(let i=0;i<20;i++){
-    let h = document.createElement("div");
-    h.className="heart";
-    h.innerText="❤️";
-    h.style.left=Math.random()*100+"vw";
-    h.style.animationDuration=2+Math.random()*3+"s";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),5000);
-  }
-}
-</script>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <script>
+    "use strict";
+
+    const $ = (selector, parent = document) => parent.querySelector(selector);
+    const $$ = (selector, parent = document) => Array.from(parent.querySelectorAll(selector));
+
+    const STORAGE = {
+      history: "flamesPro.history",
+      settings: "flamesPro.settings",
+      achievements: "flamesPro.achievements"
+    };
+
+    const AUDIO_SOURCES = {
+      tap: "https://assets.mixkit.co/sfx/preview/mixkit-click-error-1110.mp3",
+      success: "https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3",
+      error: "https://assets.mixkit.co/sfx/preview/mixkit-click-error-1110.mp3"
+    };
+
+    const FLAMES = [
+      { key: "friends", letter: "F", emoji: "🤝", color: "#4cc9f0" },
+      { key: "love", letter: "L", emoji: "❤️", color: "#ff4f8b" },
+      { key: "affection", letter: "A", emoji: "🥰", color: "#ffd166" },
+      { key: "marriage", letter: "M", emoji: "💍", color: "#9b5de5" },
+      { key: "enemies", letter: "E", emoji: "😈", color: "#ef233c" },
+      { key: "siblings", letter: "S", emoji: "🫶", color: "#40e8a3" }
+    ];
+
+    const COPY = {
+      en: {
+        tagline: "Premium love compatibility studio",
+        lead: "Enter two names, watch the classic FLAMES wheel eliminate letters, and get a playful compatibility card with history, stats, sharing, and surprises.",
+        labels: {
+          nameA: "Your name", nameB: "Partner name", dobA: "Your DOB, optional", dobB: "Partner DOB, optional",
+          theme: "Theme", language: "Language", vibration: "Vibration", heart: "Heart rain", total: "Total",
+          common: "Most common", favorite: "Favorite pair", history: "History", compatibility: "Compatibility",
+          meter: "Love meter", nick: "Nickname", luckyNumber: "Lucky number", luckyColor: "Lucky color",
+          luckyDate: "Lucky date", zodiac: "Zodiac match"
+        },
+        placeholders: { a: "Alex", b: "Sam", search: "Search names or results" },
+        hints: { a: "Letters matter. Spaces do not.", b: "Try a famous couple for easter eggs." },
+        buttons: {
+          calc: "Calculate FLAMES ✨", reset: "↺ Reset", demo: "♡ Famous Pair", history: "⌕ History",
+          clear: "Clear history"
+        },
+        states: {
+          ready: "Ready when your heart is.",
+          validating: "Checking names...",
+          counting: "Counting unmatched letters...",
+          wheel: "Spinning the FLAMES wheel...",
+          reveal: "Preparing the dramatic reveal...",
+          empty: "No history yet. Your next calculation starts the archive.",
+          noMatch: "No matching history."
+        },
+        errors: { names: "Enter both names.", same: "Use two different names.", letters: "Names need at least two letters each." },
+        results: {
+          friends: ["Friends", "A warm bond with premium banter, shared playlists, and suspiciously good timing."],
+          love: ["Love", "Big main-character chemistry. The universe just leaned forward."],
+          affection: ["Affection", "Soft sparks, kind energy, and a connection that could grow beautifully."],
+          marriage: ["Marriage", "Long-term energy detected. Someone cue the cinematic slow walk."],
+          enemies: ["Enemies", "Chaotic tension. Could be rivalry, could be spicy plot development."],
+          siblings: ["Siblings", "Protective, familiar, and deeply unserious in the best way."]
+        },
+        funny: [
+          "The algorithm wore sunglasses for this one.",
+          "Your names just had a tiny soap opera backstage.",
+          "Compatibility powered by math, vibes, and questionable confidence.",
+          "This result has been approved by the council of dramatic pauses."
+        ],
+        quotes: [
+          "Love is friendship that found its favorite song.",
+          "The best connections feel calm and electric at the same time.",
+          "A little kindness is the most attractive feature in any universe.",
+          "Some names rhyme quietly before people notice."
+        ],
+        advice: [
+          "Ask one better question than usual today.",
+          "Send the message, but make it kind and specific.",
+          "Choose curiosity before conclusions.",
+          "Small consistency beats grand drama."
+        ],
+        copied: "Result copied.",
+        saved: "Result saved to history.",
+        cleared: "History cleared.",
+        png: "PNG card downloaded.",
+        achievement: "Achievement unlocked: ",
+        footer: "Offline-friendly. Keyboard: Ctrl/⌘ + Enter calculates, Esc resets."
+      },
+      te: {
+        tagline: "ప్రీమియం ప్రేమ అనుకూలత స్టూడియో",
+        lead: "రెండు పేర్లు ఇవ్వండి, FLAMES చక్రం తిరుగుతూ ఫలితాన్ని చూపిస్తుంది.",
+        labels: {
+          nameA: "మీ పేరు", nameB: "వారి పేరు", dobA: "మీ DOB, ఐచ్ఛికం", dobB: "వారి DOB, ఐచ్ఛికం",
+          theme: "థీమ్", language: "భాష", vibration: "వైబ్రేషన్", heart: "హార్ట్ రైన్", total: "మొత్తం",
+          common: "సాధారణ ఫలితం", favorite: "ఫేవరెట్ జంట", history: "హిస్టరీ", compatibility: "అనుకూలత",
+          meter: "లవ్ మీటర్", nick: "నిక్ నేమ్", luckyNumber: "లక్కీ నంబర్", luckyColor: "లక్కీ కలర్",
+          luckyDate: "లక్కీ తేదీ", zodiac: "రాశి మ్యాచ్"
+        },
+        placeholders: { a: "అలెక్స్", b: "సామ్", search: "పేర్లు లేదా ఫలితాలు వెతకండి" },
+        hints: { a: "స్పేసులు లెక్కలోకి రావు.", b: "ఫేమస్ కపుల్ ట్రై చేయండి." },
+        buttons: { calc: "FLAMES లెక్కించండి ✨", reset: "↺ రీసెట్", demo: "♡ ఫేమస్ జంట", history: "⌕ హిస్టరీ", clear: "హిస్టరీ క్లియర్" },
+        states: { ready: "మీ హృదయం సిద్ధంగా ఉంటే మొదలు.", validating: "పేర్లు చూస్తున్నాం...", counting: "మిగిలిన అక్షరాలు లెక్కిస్తున్నాం...", wheel: "FLAMES చక్రం తిరుగుతోంది...", reveal: "ఫలితం సిద్ధం అవుతోంది...", empty: "ఇంకా హిస్టరీ లేదు.", noMatch: "హిస్టరీలో దొరకలేదు." },
+        errors: { names: "రెండు పేర్లు ఇవ్వండి.", same: "రెండు వేరు పేర్లు ఇవ్వండి.", letters: "ప్రతి పేరులో కనీసం రెండు అక్షరాలు ఉండాలి." },
+        results: {
+          friends: ["స్నేహం", "చాలా మంచి స్నేహ బంధం కనిపిస్తోంది."],
+          love: ["ప్రేమ", "సూపర్ కెమిస్ట్రీ కనిపిస్తోంది."],
+          affection: ["ఆప్యాయత", "మృదువైన అనుబంధం పెరిగే అవకాశం ఉంది."],
+          marriage: ["వివాహం", "లాంగ్ టర్మ్ వైబ్స్ కనిపిస్తున్నాయి."],
+          enemies: ["శత్రువులు", "కొంచెం డ్రామా, కొంచెం టెన్షన్."],
+          siblings: ["సిబ్లింగ్స్", "పరిచయమైన, సరదా బంధం."]
+        },
+        funny: ["ఈ ఫలితానికి డ్రామా బ్యాక్ గ్రౌండ్ మ్యూజిక్ కావాలి.", "పేర్లు బ్యాక్ స్టేజ్ లో మాట్లాడుకున్నాయి.", "మ్యాథ్స్ తో పాటు వైబ్స్ కూడా ఉన్నాయి."],
+        quotes: ["ప్రేమ అంటే నమ్మకంతో పెరిగే స్నేహం.", "మంచి అనుబంధం ప్రశాంతంగా, అందంగా ఉంటుంది.", "చిన్న దయ పెద్ద మ్యాజిక్ చేస్తుంది."],
+        advice: ["ఈ రోజు ఒక మంచి ప్రశ్న అడగండి.", "స్పష్టంగా, ప్రేమగా మాట్లాడండి.", "తీర్పుకంటే ఆసక్తిని ఎంచుకోండి."],
+        copied: "ఫలితం కాపీ అయింది.", saved: "హిస్టరీలో సేవ్ అయింది.", cleared: "హిస్టరీ క్లియర్ అయింది.", png: "PNG కార్డ్ డౌన్ లోడ్ అయింది.", achievement: "అచీవ్ మెంట్ అన్లాక్: ", footer: "ఆఫ్ లైన్ ఫ్రెండ్లీ. Keyboard: Ctrl/⌘ + Enter, Esc."
+      },
+      hi: {
+        tagline: "प्रीमियम लव कम्पैटिबिलिटी स्टूडियो",
+        lead: "दो नाम डालें, FLAMES व्हील को घूमते देखें, और मजेदार कम्पैटिबिलिटी कार्ड पाएं।",
+        labels: {
+          nameA: "आपका नाम", nameB: "पार्टनर का नाम", dobA: "आपका DOB, वैकल्पिक", dobB: "पार्टनर DOB, वैकल्पिक",
+          theme: "थीम", language: "भाषा", vibration: "वाइब्रेशन", heart: "हार्ट रेन", total: "कुल",
+          common: "सबसे आम", favorite: "फेवरेट जोड़ी", history: "हिस्ट्री", compatibility: "कम्पैटिबिलिटी",
+          meter: "लव मीटर", nick: "निकनेम", luckyNumber: "लकी नंबर", luckyColor: "लकी कलर",
+          luckyDate: "लकी डेट", zodiac: "जोडिएक मैच"
+        },
+        placeholders: { a: "Alex", b: "Sam", search: "नाम या रिजल्ट खोजें" },
+        hints: { a: "स्पेस गिने नहीं जाते.", b: "फेमस कपल ट्राय करें." },
+        buttons: { calc: "FLAMES कैलकुलेट करें ✨", reset: "↺ रीसेट", demo: "♡ फेमस पेयर", history: "⌕ हिस्ट्री", clear: "हिस्ट्री साफ करें" },
+        states: { ready: "दिल तैयार हो तो शुरू करें.", validating: "नाम चेक हो रहे हैं...", counting: "बचे हुए अक्षर गिने जा रहे हैं...", wheel: "FLAMES व्हील घूम रहा है...", reveal: "ड्रामैटिक रिजल्ट तैयार है...", empty: "अभी कोई हिस्ट्री नहीं.", noMatch: "हिस्ट्री में कुछ नहीं मिला." },
+        errors: { names: "दोनों नाम डालें.", same: "दो अलग नाम डालें.", letters: "हर नाम में कम से कम दो अक्षर चाहिए." },
+        results: {
+          friends: ["दोस्ती", "मस्ती, भरोसा और अच्छी टाइमिंग वाला बॉन्ड."],
+          love: ["प्यार", "कमाल की केमिस्ट्री. यूनिवर्स ध्यान दे रहा है."],
+          affection: ["लगाव", "नरम स्पार्क्स और खूबसूरत कनेक्शन."],
+          marriage: ["शादी", "लॉन्ग टर्म एनर्जी साफ दिख रही है."],
+          enemies: ["दुश्मनी", "थोड़ा ड्रामा, थोड़ी टेंशन, पूरी कहानी."],
+          siblings: ["सिब्लिंग्स", "फैमिलियर, प्रोटेक्टिव और बहुत मजेदार."]
+        },
+        funny: ["इस रिजल्ट ने सनग्लासेस पहन लिए.", "आपके नामों ने बैकस्टेज मिनी ड्रामा किया.", "मैथ्स, वाइब्स और कॉन्फिडेंस से बना रिजल्ट."],
+        quotes: ["प्यार वह दोस्ती है जिसे अपना पसंदीदा गीत मिल गया.", "अच्छा कनेक्शन शांत भी होता है और इलेक्ट्रिक भी.", "थोड़ी kindness हमेशा खूबसूरत लगती है."],
+        advice: ["आज एक बेहतर सवाल पूछें.", "मेसेज भेजें, पर साफ और प्यारा.", "निष्कर्ष से पहले जिज्ञासा चुनें."],
+        copied: "रिजल्ट कॉपी हुआ.", saved: "हिस्ट्री में सेव हुआ.", cleared: "हिस्ट्री साफ हुई.", png: "PNG कार्ड डाउनलोड हुआ.", achievement: "अचीवमेंट अनलॉक: ", footer: "ऑफलाइन-फ्रेंडली. Keyboard: Ctrl/⌘ + Enter, Esc."
+      }
+    };
+
+    const famousPairs = {
+      "romeo+juliet": "Star-crossed achievement unlocked.",
+      "juliet+romeo": "Star-crossed achievement unlocked.",
+      "radha+krishna": "Divine love mode shimmered.",
+      "krishna+radha": "Divine love mode shimmered.",
+      "laila+majnu": "Legendary romance detected.",
+      "majnu+laila": "Legendary romance detected.",
+      "rose+jack": "Unsinkable feelings detected.",
+      "jack+rose": "Unsinkable feelings detected.",
+      "tony+pepper": "Arc reactor chemistry detected.",
+      "pepper+tony": "Arc reactor chemistry detected."
+    };
+
+    const achievements = [
+      ["first", "First Spark", "Calculate your first result."],
+      ["ten", "Love Analyst", "Run 10 calculations."],
+      ["allResults", "Full FLAMES", "Unlock every FLAMES result."],
+      ["famous", "Pop Culture Cupid", "Find a famous couple easter egg."],
+      ["download", "Card Collector", "Download a result card."],
+      ["night", "Midnight Matcher", "Calculate between 12 AM and 4 AM."]
+    ];
+
+    const state = {
+      history: readJSON(STORAGE.history, []),
+      settings: Object.assign({ theme: "romantic", lang: "en", light: false, sound: true, vibe: true, heart: true }, readJSON(STORAGE.settings, {})),
+      achievements: readJSON(STORAGE.achievements, {}),
+      lastResult: null,
+      sounds: {},
+      audio: null
+    };
+
+    const els = {
+      loader: $("#loader"), loaderText: $("#loaderText"), form: $("#flamesForm"), nameA: $("#nameA"), nameB: $("#nameB"),
+      dobA: $("#dobA"), dobB: $("#dobB"), error: $("#errorText"), stage: $("#stage"), stageText: $("#stageText"),
+      wheelWrap: $("#wheelWrap"), resultArea: $("#resultArea"), resultEmoji: $("#resultEmoji"), resultName: $("#resultName"),
+      resultDescription: $("#resultDescription"), percentText: $("#percentText"), percentBar: $("#percentBar"),
+      loveMeter: $("#loveMeter"), nickname: $("#nickname"), luckyNumber: $("#luckyNumber"), luckyColor: $("#luckyColor"),
+      luckyDate: $("#luckyDate"), zodiacText: $("#zodiacText"), funnyMessage: $("#funnyMessage"), romanticQuote: $("#romanticQuote"),
+      dailyAdvice: $("#dailyAdvice"), historyList: $("#historyList"), historySearch: $("#historySearch"), totalStat: $("#totalStat"),
+      commonStat: $("#commonStat"), favoriteStat: $("#favoriteStat"), settingsPanel: $("#settingsPanel"), themeSelect: $("#themeSelect"),
+      langSelect: $("#langSelect"), toast: $("#toast"), captureCard: $("#captureCard"), achModal: $("#achievementsModal"),
+      achList: $("#achievementsList")
+    };
+
+    function init() {
+      applySettings();
+      bindEvents();
+      buildWheel();
+      renderHistory();
+      renderAchievements();
+      translate();
+      dailyContent();
+      preloadAudio();
+      spawnParticles();
+      setTimeout(() => els.loader.classList.add("hide"), 850);
+    }
+
+    function bindEvents() {
+      els.form.addEventListener("submit", handleSubmit);
+      $("#modeBtn").addEventListener("click", () => updateSetting("light", !state.settings.light));
+      $("#soundBtn").addEventListener("click", () => updateSetting("sound", !state.settings.sound));
+      $("#settingsBtn").addEventListener("click", () => els.settingsPanel.classList.toggle("open"));
+      $("#resetBtn").addEventListener("click", resetForm);
+      $("#demoBtn").addEventListener("click", fillDemo);
+      $("#historyFocusBtn").addEventListener("click", () => els.historySearch.focus());
+      $("#clearHistoryBtn").addEventListener("click", clearHistory);
+      $("#vibeBtn").addEventListener("click", () => updateSetting("vibe", !state.settings.vibe));
+      $("#heartBtn").addEventListener("click", () => updateSetting("heart", !state.settings.heart));
+      els.themeSelect.addEventListener("change", e => updateSetting("theme", e.target.value));
+      els.langSelect.addEventListener("change", e => updateSetting("lang", e.target.value));
+      els.historySearch.addEventListener("input", renderHistory);
+      $("#whatsappBtn").addEventListener("click", shareWhatsApp);
+      $("#nativeShareBtn").addEventListener("click", nativeShare);
+      $("#copyBtn").addEventListener("click", copyResult);
+      $("#downloadBtn").addEventListener("click", downloadCard);
+      $("#achievementsBtn").addEventListener("click", () => els.achModal.classList.add("open"));
+      $("#closeAchievements").addEventListener("click", () => els.achModal.classList.remove("open"));
+      els.achModal.addEventListener("click", e => { if (e.target === els.achModal) els.achModal.classList.remove("open"); });
+      document.addEventListener("keydown", handleKeys);
+      document.addEventListener("click", addRipple);
+    }
+
+    function handleKeys(event) {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        event.preventDefault();
+        els.form.requestSubmit();
+      }
+      if (event.key === "Escape") resetForm();
+    }
+
+    function addRipple(event) {
+      const btn = event.target.closest("button");
+      if (!btn) return;
+      const rect = btn.getBoundingClientRect();
+      const ripple = document.createElement("span");
+      ripple.className = "ripple";
+      ripple.style.left = `${event.clientX - rect.left}px`;
+      ripple.style.top = `${event.clientY - rect.top}px`;
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 700);
+    }
+
+    function applySettings() {
+      document.body.dataset.theme = state.settings.theme;
+      document.body.classList.toggle("light", state.settings.light);
+      els.themeSelect.value = state.settings.theme;
+      els.langSelect.value = state.settings.lang;
+      $("#modeBtn").textContent = state.settings.light ? "☀" : "☾";
+      $("#soundBtn").textContent = state.settings.sound ? "🔊" : "🔇";
+      $("#vibeBtn").setAttribute("aria-pressed", String(state.settings.vibe));
+      $("#heartBtn").setAttribute("aria-pressed", String(state.settings.heart));
+      document.documentElement.lang = state.settings.lang === "te" ? "te" : state.settings.lang === "hi" ? "hi" : "en";
+      localStorage.setItem(STORAGE.settings, JSON.stringify(state.settings));
+    }
+
+    function updateSetting(key, value) {
+      state.settings[key] = value;
+      applySettings();
+      translate();
+      play("tap");
+    }
+
+    function translate() {
+      const c = COPY[state.settings.lang];
+      $("#tagline").textContent = c.tagline;
+      $("#leadText").textContent = c.lead;
+      $("#labelA").textContent = c.labels.nameA;
+      $("#labelB").textContent = c.labels.nameB;
+      $("#labelDobA").textContent = c.labels.dobA;
+      $("#labelDobB").textContent = c.labels.dobB;
+      $("#themeLabel").textContent = c.labels.theme;
+      $("#languageLabel").textContent = c.labels.language;
+      $("#vibeLabel").textContent = c.labels.vibration;
+      $("#heartLabel").textContent = c.labels.heart;
+      $("#totalLabel").textContent = c.labels.total;
+      $("#commonLabel").textContent = c.labels.common;
+      $("#favoriteLabel").textContent = c.labels.favorite;
+      $("#historyTitle").textContent = c.labels.history;
+      $("#compatLabel").textContent = c.labels.compatibility;
+      $("#meterLabel").textContent = c.labels.meter;
+      $("#nickLabel").textContent = c.labels.nick;
+      $("#luckyNumberLabel").textContent = c.labels.luckyNumber;
+      $("#luckyColorLabel").textContent = c.labels.luckyColor;
+      $("#luckyDateLabel").textContent = c.labels.luckyDate;
+      $("#zodiacLabel").textContent = c.labels.zodiac;
+      els.nameA.placeholder = c.placeholders.a;
+      els.nameB.placeholder = c.placeholders.b;
+      els.historySearch.placeholder = c.placeholders.search;
+      $("#hintA").textContent = c.hints.a;
+      $("#hintB").textContent = c.hints.b;
+      $("#calcBtn").textContent = c.buttons.calc;
+      $("#resetBtn").textContent = c.buttons.reset;
+      $("#demoBtn").textContent = c.buttons.demo;
+      $("#historyFocusBtn").textContent = c.buttons.history;
+      $("#clearHistoryBtn").textContent = c.buttons.clear;
+      $("#footerText").textContent = c.footer;
+      if (!state.lastResult) els.stageText.textContent = c.states.ready;
+      renderHistory();
+    }
+
+    async function handleSubmit(event) {
+      event.preventDefault();
+      const c = COPY[state.settings.lang];
+      const nameA = cleanDisplayName(els.nameA.value);
+      const nameB = cleanDisplayName(els.nameB.value);
+      els.error.textContent = "";
+      const valid = validateNames(nameA, nameB);
+      if (valid) {
+        els.error.textContent = c.errors[valid];
+        shake(els.form);
+        play("error");
+        return;
+      }
+
+      $("#calcBtn").disabled = true;
+      els.resultArea.hidden = true;
+      await runStages([c.states.validating, c.states.counting, c.states.wheel, c.states.reveal]);
+      const result = calculateResult(nameA, nameB, els.dobA.value, els.dobB.value);
+      state.lastResult = result;
+      renderResult(result);
+      saveResult(result);
+      unlock("first");
+      if (state.history.length >= 10) unlock("ten");
+      if (new Set(state.history.map(item => item.key)).size === FLAMES.length) unlock("allResults");
+      const hour = new Date().getHours();
+      if (hour >= 0 && hour < 4) unlock("night");
+      if (result.easterEgg) unlock("famous");
+      $("#calcBtn").disabled = false;
+      play("success");
+      vibrate([20, 40, 25]);
+      if (state.settings.heart) heartRain();
+      heartExplosion();
+      confetti();
+      toast(c.saved);
+    }
+
+    function validateNames(a, b) {
+      if (!a || !b) return "names";
+      if (normalize(a) === normalize(b)) return "same";
+      if (normalize(a).length < 2 || normalize(b).length < 2) return "letters";
+      return "";
+    }
+
+    function cleanDisplayName(value) {
+      return value.replace(/\s+/g, " ").trim();
+    }
+
+    function normalize(value) {
+      return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z\u0900-\u097F\u0C00-\u0C7F]/gi, "");
+    }
+
+    function flamesElimination(count) {
+      let items = FLAMES.map(item => item.letter);
+      let index = 0;
+      const removed = [];
+      while (items.length > 1) {
+        index = (index + count - 1) % items.length;
+        removed.push(items[index]);
+        items.splice(index, 1);
+      }
+      return { finalLetter: items[0], removed };
+    }
+
+    function unmatchedCount(a, b) {
+      const left = normalize(a).split("");
+      const right = normalize(b).split("");
+      for (let i = 0; i < left.length; i++) {
+        const found = right.indexOf(left[i]);
+        if (found !== -1) {
+          left.splice(i, 1);
+          right.splice(found, 1);
+          i--;
+        }
+      }
+      return Math.max(1, left.length + right.length);
+    }
+
+    function calculateResult(nameA, nameB, dobA, dobB) {
+      const count = unmatchedCount(nameA, nameB);
+      const elimination = flamesElimination(count);
+      const base = FLAMES.find(item => item.letter === elimination.finalLetter) || FLAMES[0];
+      const seed = hash(`${normalize(nameA)}|${normalize(nameB)}|${base.key}`);
+      const percent = deterministicPercent(seed, base.key);
+      const luckyColors = ["Rose Quartz", "Moon Gold", "Electric Blue", "Cherry Pink", "Sea Glass", "Solar Orange", "Lavender", "Mint"];
+      const result = {
+        id: `${Date.now()}-${seed}`,
+        createdAt: new Date().toISOString(),
+        nameA, nameB, dobA, dobB,
+        key: base.key,
+        letter: base.letter,
+        emoji: base.emoji,
+        color: base.color,
+        count,
+        removed: elimination.removed,
+        percent,
+        nickname: makeNickname(nameA, nameB),
+        luckyNumber: (seed % 99) + 1,
+        luckyColor: luckyColors[seed % luckyColors.length],
+        luckyDate: makeLuckyDate(seed),
+        zodiac: zodiacCompatibility(dobA, dobB),
+        funny: pick(COPY.en.funny, seed),
+        quote: dailyPick(COPY.en.quotes, seed),
+        advice: dailyPick(COPY.en.advice, seed + 9),
+        easterEgg: famousPairs[`${normalize(nameA)}+${normalize(nameB)}`] || ""
+      };
+      return result;
+    }
+
+    function deterministicPercent(seed, key) {
+      const ranges = {
+        friends: [58, 88], love: [72, 99], affection: [63, 94],
+        marriage: [78, 100], enemies: [18, 62], siblings: [45, 80]
+      };
+      const [min, max] = ranges[key] || [40, 95];
+      return min + (seed % (max - min + 1));
+    }
+
+    function renderResult(result) {
+      const c = COPY[state.settings.lang];
+      const localized = c.results[result.key];
+      els.resultArea.hidden = false;
+      els.resultEmoji.textContent = result.emoji;
+      els.resultName.textContent = localized[0];
+      els.resultName.style.setProperty("--accent", result.color);
+      els.resultDescription.textContent = "";
+      typeText(els.resultDescription, localized[1]);
+      els.percentText.textContent = `${result.percent}%`;
+      requestAnimationFrame(() => { els.percentBar.style.width = `${result.percent}%`; });
+      els.loveMeter.textContent = makeMeter(result.percent);
+      els.nickname.textContent = result.nickname;
+      els.luckyNumber.textContent = result.luckyNumber;
+      els.luckyColor.textContent = result.luckyColor;
+      els.luckyDate.textContent = result.luckyDate;
+      els.zodiacText.textContent = result.zodiac || "Optional";
+      els.funnyMessage.textContent = result.easterEgg || pick(c.funny, hash(result.id));
+      els.romanticQuote.textContent = `“${dailyPick(c.quotes, hash(result.nameA + result.nameB))}”`;
+      els.dailyAdvice.textContent = dailyPick(c.advice, new Date().getDate());
+      document.documentElement.style.setProperty("--accent", result.color);
+      setTimeout(() => els.resultArea.scrollIntoView({ behavior: "smooth", block: "nearest" }), 150);
+    }
+
+    function makeMeter(percent) {
+      const full = Math.round(percent / 20);
+      return "♥".repeat(full).padEnd(5, "♡");
+    }
+
+    function makeNickname(a, b) {
+      const na = cleanDisplayName(a).replace(/\s/g, "");
+      const nb = cleanDisplayName(b).replace(/\s/g, "");
+      const first = na.slice(0, Math.max(2, Math.ceil(na.length / 2)));
+      const second = nb.slice(Math.floor(nb.length / 2));
+      return `${first}${second}` || "Lovebirds";
+    }
+
+    function makeLuckyDate(seed) {
+      const date = new Date();
+      date.setDate(date.getDate() + (seed % 28) + 1);
+      return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    }
+
+    function zodiacCompatibility(dobA, dobB) {
+      if (!dobA || !dobB) return "";
+      const za = zodiac(new Date(dobA));
+      const zb = zodiac(new Date(dobB));
+      const score = 55 + (hash(za + zb) % 45);
+      return `${za} + ${zb}: ${score}%`;
+    }
+
+    function zodiac(date) {
+      const d = date.getUTCDate();
+      const m = date.getUTCMonth() + 1;
+      const signs = [
+        ["Capricorn", 1, 19], ["Aquarius", 2, 18], ["Pisces", 3, 20], ["Aries", 4, 19],
+        ["Taurus", 5, 20], ["Gemini", 6, 20], ["Cancer", 7, 22], ["Leo", 8, 22],
+        ["Virgo", 9, 22], ["Libra", 10, 22], ["Scorpio", 11, 21], ["Sagittarius", 12, 21], ["Capricorn", 12, 31]
+      ];
+      return signs.find(([, month, day]) => m < month || (m === month && d <= day))[0];
+    }
+
+    function buildWheel() {
+      $$(".wheel-letter", els.wheelWrap).forEach(el => el.remove());
+      FLAMES.forEach((item, i) => {
+        const angle = (i / FLAMES.length) * Math.PI * 2 - Math.PI / 2;
+        const letter = document.createElement("span");
+        letter.className = "wheel-letter";
+        letter.dataset.letter = item.letter;
+        letter.textContent = item.letter;
+        letter.style.left = `${50 + Math.cos(angle) * 39}%`;
+        letter.style.top = `${50 + Math.sin(angle) * 39}%`;
+        letter.style.transform = "translate(-50%, -50%)";
+        els.wheelWrap.appendChild(letter);
+      });
+    }
+
+    async function runStages(messages) {
+      buildWheel();
+      for (const message of messages) {
+        els.stageText.textContent = message;
+        play("tap");
+        await wait(380);
+      }
+      const tempCount = unmatchedCount(els.nameA.value, els.nameB.value);
+      const removed = flamesElimination(tempCount).removed;
+      for (const letter of removed) {
+        const node = $(`.wheel-letter[data-letter="${letter}"]`, els.wheelWrap);
+        if (node) node.classList.add("out");
+        sparkleAtCenter();
+        await wait(300);
+      }
+    }
+
+    function saveResult(result) {
+      state.history.unshift(result);
+      state.history = state.history.slice(0, 80);
+      localStorage.setItem(STORAGE.history, JSON.stringify(state.history));
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const c = COPY[state.settings.lang];
+      const q = (els.historySearch.value || "").toLowerCase();
+      const filtered = state.history.filter(item => `${item.nameA} ${item.nameB} ${localizedResultName(item.key)}`.toLowerCase().includes(q));
+      els.totalStat.textContent = state.history.length;
+      els.commonStat.textContent = mostCommonResult();
+      els.favoriteStat.textContent = favoritePair();
+      els.historyList.innerHTML = "";
+      if (!filtered.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = state.history.length ? c.states.noMatch : c.states.empty;
+        els.historyList.appendChild(empty);
+        return;
+      }
+      filtered.forEach(item => {
+        const row = document.createElement("button");
+        row.type = "button";
+        row.className = "history-item";
+        row.innerHTML = `<span><b>${escapeHTML(item.nameA)} + ${escapeHTML(item.nameB)}</b><small>${new Date(item.createdAt).toLocaleString()} · ${localizedResultName(item.key)} · ${item.percent}%</small></span><span>${item.emoji}</span>`;
+        row.addEventListener("click", () => {
+          state.lastResult = item;
+          renderResult(item);
+        });
+        els.historyList.appendChild(row);
+      });
+    }
+
+    function mostCommonResult() {
+      if (!state.history.length) return "-";
+      const counts = countBy(state.history, "key");
+      return localizedResultName(Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0]);
+    }
+
+    function favoritePair() {
+      if (!state.history.length) return "-";
+      const counts = {};
+      state.history.forEach(item => {
+        const pair = `${item.nameA} + ${item.nameB}`;
+        counts[pair] = (counts[pair] || 0) + 1;
+      });
+      return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+    }
+
+    function localizedResultName(key) {
+      return COPY[state.settings.lang].results[key]?.[0] || key;
+    }
+
+    function clearHistory() {
+      state.history = [];
+      localStorage.setItem(STORAGE.history, JSON.stringify(state.history));
+      renderHistory();
+      toast(COPY[state.settings.lang].cleared);
+    }
+
+    function fillDemo() {
+      const pairs = [["Romeo", "Juliet"], ["Radha", "Krishna"], ["Laila", "Majnu"], ["Tony", "Pepper"], ["Jack", "Rose"]];
+      const pair = pairs[Math.floor(Math.random() * pairs.length)];
+      els.nameA.value = pair[0];
+      els.nameB.value = pair[1];
+      play("tap");
+    }
+
+    function resetForm() {
+      els.form.reset();
+      els.error.textContent = "";
+      els.resultArea.hidden = true;
+      state.lastResult = null;
+      els.stageText.textContent = COPY[state.settings.lang].states.ready;
+      buildWheel();
+      play("tap");
+    }
+
+    function resultMessage() {
+      const r = state.lastResult;
+      if (!r) return "";
+      return `FLAMES Pro 2026\n${r.nameA} + ${r.nameB}\n${localizedResultName(r.key)} ${r.emoji}\nCompatibility: ${r.percent}%\nNickname: ${r.nickname}`;
+    }
+
+    function shareWhatsApp() {
+      if (!state.lastResult) return;
+      window.open(`https://wa.me/?text=${encodeURIComponent(resultMessage())}`, "_blank", "noopener");
+    }
+
+    async function nativeShare() {
+      if (!state.lastResult) return;
+      const text = resultMessage();
+      if (navigator.share) {
+        try { await navigator.share({ title: "FLAMES Pro 2026", text }); }
+        catch (_) { /* user cancelled */ }
+      } else {
+        copyText(text);
+      }
+    }
+
+    function copyResult() {
+      if (!state.lastResult) return;
+      copyText(resultMessage());
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const area = document.createElement("textarea");
+        area.value = text;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+      }
+      toast(COPY[state.settings.lang].copied);
+    }
+
+    function downloadCard() {
+      if (!state.lastResult) return;
+      const r = state.lastResult;
+      const canvas = document.createElement("canvas");
+      canvas.width = 1080;
+      canvas.height = 1350;
+      const ctx = canvas.getContext("2d");
+      const grad = ctx.createLinearGradient(0, 0, 1080, 1350);
+      grad.addColorStop(0, getCSS("--bg-a"));
+      grad.addColorStop(.55, getCSS("--bg-b"));
+      grad.addColorStop(1, r.color);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 1080, 1350);
+      drawCircle(ctx, 130, 140, 230, "rgba(255,255,255,.14)");
+      drawCircle(ctx, 920, 1180, 280, "rgba(255,255,255,.12)");
+      roundedRect(ctx, 90, 120, 900, 1110, 56, "rgba(255,255,255,.18)", "rgba(255,255,255,.42)");
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#fff";
+      ctx.font = "800 52px system-ui, sans-serif";
+      ctx.fillText("FLAMES Pro 2026", 540, 220);
+      ctx.font = "140px serif";
+      ctx.fillText(r.emoji, 540, 410);
+      ctx.font = "900 92px system-ui, sans-serif";
+      ctx.fillText(localizedResultName(r.key), 540, 535);
+      ctx.font = "700 42px system-ui, sans-serif";
+      ctx.fillText(`${r.nameA} + ${r.nameB}`, 540, 620);
+      roundedRect(ctx, 190, 700, 700, 46, 23, "rgba(255,255,255,.18)");
+      roundedRect(ctx, 190, 700, 7 * r.percent, 46, 23, r.color);
+      ctx.font = "900 72px system-ui, sans-serif";
+      ctx.fillText(`${r.percent}%`, 540, 840);
+      ctx.font = "600 36px system-ui, sans-serif";
+      ctx.fillText(`Nickname: ${r.nickname}`, 540, 930);
+      ctx.fillText(`Lucky ${r.luckyNumber} · ${r.luckyColor} · ${r.luckyDate}`, 540, 995);
+      ctx.font = "500 31px system-ui, sans-serif";
+      wrapText(ctx, COPY[state.settings.lang].results[r.key][1], 540, 1085, 760, 44);
+      const link = document.createElement("a");
+      link.download = `flames-${safeFile(r.nameA)}-${safeFile(r.nameB)}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      unlock("download");
+      toast(COPY[state.settings.lang].png);
+    }
+
+    function dailyContent() {
+      const c = COPY[state.settings.lang];
+      els.loaderText.textContent = dailyPick(c.advice, new Date().getDate());
+    }
+
+    function unlock(key) {
+      if (state.achievements[key]) return;
+      state.achievements[key] = new Date().toISOString();
+      localStorage.setItem(STORAGE.achievements, JSON.stringify(state.achievements));
+      renderAchievements();
+      const ach = achievements.find(item => item[0] === key);
+      if (ach) toast(COPY[state.settings.lang].achievement + ach[1]);
+    }
+
+    function renderAchievements() {
+      els.achList.innerHTML = "";
+      achievements.forEach(([key, title, desc]) => {
+        const item = document.createElement("div");
+        item.className = `achievement ${state.achievements[key] ? "" : "locked"}`;
+        item.innerHTML = `<strong>${state.achievements[key] ? "🏆" : "🔒"} ${title}</strong><br><span>${desc}</span>`;
+        els.achList.appendChild(item);
+      });
+    }
+
+    function typeText(node, text) {
+      node.textContent = "";
+      let i = 0;
+      const timer = setInterval(() => {
+        node.textContent += text[i] || "";
+        i++;
+        if (i >= text.length) clearInterval(timer);
+      }, 18);
+    }
+
+    function heartRain() {
+      for (let i = 0; i < 34; i++) {
+        const heart = document.createElement("span");
+        heart.className = "heart";
+        heart.textContent = ["❤️", "💖", "💘", "💕"][i % 4];
+        heart.style.setProperty("--x", `${Math.random() * 100}vw`);
+        heart.style.setProperty("--drift", `${(Math.random() - .5) * 34}vw`);
+        heart.style.setProperty("--dur", `${2.5 + Math.random() * 2.8}s`);
+        heart.style.setProperty("--size", `${16 + Math.random() * 18}px`);
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }
+    }
+
+    function heartExplosion() {
+      const rect = els.stage.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      for (let i = 0; i < 26; i++) {
+        const s = document.createElement("span");
+        s.className = "sparkle";
+        s.style.left = `${x}px`;
+        s.style.top = `${y}px`;
+        s.style.setProperty("--dx", `${Math.cos(i / 26 * Math.PI * 2) * (80 + Math.random() * 90)}px`);
+        s.style.setProperty("--dy", `${Math.sin(i / 26 * Math.PI * 2) * (80 + Math.random() * 90)}px`);
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 900);
+      }
+    }
+
+    function confetti() {
+      for (let i = 0; i < 42; i++) {
+        const c = document.createElement("span");
+        c.className = "confetti";
+        c.style.left = `${50 + (Math.random() - .5) * 30}vw`;
+        c.style.top = "18vh";
+        c.style.background = [getCSS("--accent"), getCSS("--accent-2"), getCSS("--accent-3"), "#fff"][i % 4];
+        c.style.setProperty("--dx", `${(Math.random() - .5) * 80}vw`);
+        c.style.setProperty("--dy", `${45 + Math.random() * 42}vh`);
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 1500);
+      }
+    }
+
+    function sparkleAtCenter() {
+      const rect = els.wheelWrap.getBoundingClientRect();
+      for (let i = 0; i < 8; i++) {
+        const s = document.createElement("span");
+        s.className = "sparkle";
+        s.style.left = `${rect.left + rect.width / 2}px`;
+        s.style.top = `${rect.top + rect.height / 2}px`;
+        s.style.setProperty("--dx", `${(Math.random() - .5) * 120}px`);
+        s.style.setProperty("--dy", `${(Math.random() - .5) * 120}px`);
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 850);
+      }
+    }
+
+    function spawnParticles() {
+      setInterval(() => {
+        if (document.hidden) return;
+        const p = document.createElement("span");
+        p.className = "particle";
+        p.style.setProperty("--x", `${Math.random() * 100}vw`);
+        p.style.setProperty("--drift", `${(Math.random() - .5) * 28}vw`);
+        p.style.setProperty("--dur", `${6 + Math.random() * 7}s`);
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 14000);
+      }, 520);
+    }
+
+    function preloadAudio() {
+      Object.entries(AUDIO_SOURCES).forEach(([key, src]) => {
+        const audio = new Audio(src);
+        audio.preload = "auto";
+        audio.volume = key === "success" ? .78 : .62;
+        state.sounds[key] = audio;
+      });
+    }
+
+    function play(type) {
+      if (!state.settings.sound) return;
+      const sound = state.sounds[type];
+      if (sound) {
+        const clip = sound.cloneNode();
+        clip.volume = sound.volume;
+        const attempt = clip.play();
+        if (attempt && typeof attempt.catch === "function") {
+          attempt.catch(() => playFallback(type));
+        }
+        return;
+      }
+      playFallback(type);
+    }
+
+    function playFallback(type) {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        state.audio = state.audio || new AudioContext();
+        const ctx = state.audio;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const freqs = { tap: 420, success: 660, error: 160 };
+        osc.frequency.value = freqs[type] || 440;
+        osc.type = type === "success" ? "sine" : "triangle";
+        gain.gain.setValueAtTime(.001, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(type === "error" ? .08 : .045, ctx.currentTime + .012);
+        gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + (type === "success" ? .22 : .12));
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + (type === "success" ? .24 : .14));
+      } catch (_) { /* audio unavailable */ }
+    }
+
+    function vibrate(pattern) {
+      if (state.settings.vibe && navigator.vibrate) navigator.vibrate(pattern);
+    }
+
+    function toast(message) {
+      els.toast.textContent = message;
+      els.toast.classList.add("show");
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => els.toast.classList.remove("show"), 2200);
+    }
+
+    function shake(node) {
+      node.animate([
+        { transform: "translateX(0)" }, { transform: "translateX(-8px)" },
+        { transform: "translateX(8px)" }, { transform: "translateX(0)" }
+      ], { duration: 260, easing: "ease-out" });
+    }
+
+    function hash(input) {
+      let h = 2166136261;
+      for (let i = 0; i < input.length; i++) {
+        h ^= input.charCodeAt(i);
+        h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+      }
+      return Math.abs(h >>> 0);
+    }
+
+    function pick(list, seed) { return list[seed % list.length]; }
+    function dailyPick(list, seed) {
+      const day = Math.floor(Date.now() / 86400000);
+      return pick(list, day + seed);
+    }
+    function wait(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+    function countBy(list, key) {
+      return list.reduce((acc, item) => {
+        acc[item[key]] = (acc[item[key]] || 0) + 1;
+        return acc;
+      }, {});
+    }
+    function readJSON(key, fallback) {
+      try { return JSON.parse(localStorage.getItem(key)) || fallback; }
+      catch (_) { return fallback; }
+    }
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" }[ch]));
+    }
+    function getCSS(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+    function safeFile(value) { return normalize(value).slice(0, 24) || "name"; }
+    function drawCircle(ctx, x, y, r, fill) {
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = fill; ctx.fill();
+    }
+    function roundedRect(ctx, x, y, w, h, r, fill, stroke) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+      ctx.fillStyle = fill; ctx.fill();
+      if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.stroke(); }
+    }
+    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(" ");
+      let line = "";
+      words.forEach(word => {
+        const test = `${line}${word} `;
+        if (ctx.measureText(test).width > maxWidth && line) {
+          ctx.fillText(line, x, y);
+          line = `${word} `;
+          y += lineHeight;
+        } else {
+          line = test;
+        }
+      });
+      ctx.fillText(line, x, y);
+    }
+
+    init();
+  </script>
 </body>
 </html>
